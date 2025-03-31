@@ -5,8 +5,8 @@ import java.util.NoSuchElementException;
 
 public class MyLinkedList<T> {
     private int size = 0;
-    private Node<T> first;
-    private Node<T> last;
+    private Node<T> head;
+    private Node<T> tail;
 
     public MyLinkedList() {
     }
@@ -42,7 +42,7 @@ public class MyLinkedList<T> {
     }
 
     public boolean remove(T t) {
-        Node<T> current = first;
+        Node<T> current = head;
         while (current != null) {
             if (current.item.equals(t)) {
                 unlink(current);
@@ -54,7 +54,7 @@ public class MyLinkedList<T> {
     }
 
     public void clear() {
-        Node<T> current = first;
+        Node<T> current = head;
         while (current != null) {
             Node<T> next = current.next;
             current.item = null;
@@ -62,22 +62,22 @@ public class MyLinkedList<T> {
             current.prev = null;
             current = next;
         }
-        first = last = null;
+        head = tail = null;
         size = 0;
     }
 
-    public T getFirst() {
-        if (first == null) {
+    public T getHead() {
+        if (head == null) {
             throw new NoSuchElementException();
         }
-        return first.item;
+        return head.item;
     }
 
-    public T getLast() {
-        if (last == null) {
+    public T getTail() {
+        if (tail == null) {
             throw new NoSuchElementException();
         }
-        return last.item;
+        return tail.item;
     }
 
     public T get(int index) {
@@ -98,7 +98,7 @@ public class MyLinkedList<T> {
     }
 
     public boolean contains(T t) {
-        Node<T> current = first;
+        Node<T> current = head;
         while (current != null) {
             if (current.item.equals(t)) {
                 return true;
@@ -110,7 +110,7 @@ public class MyLinkedList<T> {
 
     public int indexOf(T t) {
         int index = 0;
-        Node<T> current = first;
+        Node<T> current = head;
         while (current != null) {
             if (current.item.equals(t)) {
                 return index;
@@ -124,11 +124,11 @@ public class MyLinkedList<T> {
     public void sort(Comparator<? super T> comparator) {
         if (size < 2) return;
         LinkedListMergeSort<T> sorter = new LinkedListMergeSort<>();
-        first = sorter.mergeSort(first, comparator);
+        head = sorter.mergeSort(head, comparator);
 
-        last = first;
-        while (last != null && last.next != null) {
-            last = last.next;
+        tail = head;
+        while (tail != null && tail.next != null) {
+            tail = tail.next;
         }
     }
 
@@ -143,7 +143,7 @@ public class MyLinkedList<T> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
-        Node<T> current = first;
+        Node<T> current = head;
         while (current != null) {
             sb.append(current.item);
             if (current.next != null) {
@@ -157,19 +157,19 @@ public class MyLinkedList<T> {
 
 
     private void linkFirst(T t) {
-        final Node<T> f = first;
+        final Node<T> f = head;
         final Node<T> newNode = new Node<>(null, t, f);
-        first = newNode;
-        if (f == null) last = newNode;
+        head = newNode;
+        if (f == null) tail = newNode;
         else f.prev = newNode;
         size++;
     }
 
     private void linkLast(T t) {
-        final Node<T> l = last;
+        final Node<T> l = tail;
         final Node<T> newNode = new Node<>(l, t, null);
-        last = newNode;
-        if (l == null) first = newNode;
+        tail = newNode;
+        if (l == null) head = newNode;
         else l.next = newNode;
         size++;
     }
@@ -178,7 +178,7 @@ public class MyLinkedList<T> {
         final Node<T> pred = succ.prev;
         final Node<T> newNode = new Node<>(pred, t, succ);
         succ.prev = newNode;
-        if (pred == null) first = newNode;
+        if (pred == null) head = newNode;
         else pred.next = newNode;
         size++;
     }
@@ -191,13 +191,13 @@ public class MyLinkedList<T> {
         if (prev != null) {
             prev.next = next;
         } else {
-            first = next;
+            head = next;
         }
 
         if (next != null) {
             next.prev = prev;
         } else {
-            last = prev;
+            tail = prev;
         }
 
         x.item = null;
@@ -211,12 +211,12 @@ public class MyLinkedList<T> {
     private Node<T> node(int index) {
         Node<T> x;
         if (index < (size >> 1)) {
-            x = first;
+            x = head;
             for (int i = 0; i < index; i++) {
                 x = x.next;
             }
         } else {
-            x = last;
+            x = tail;
             for (int i = size - 1; i > index; i--) {
                 x = x.prev;
             }

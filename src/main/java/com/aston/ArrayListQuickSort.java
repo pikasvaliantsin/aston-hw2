@@ -4,6 +4,8 @@ import java.util.Comparator;
 
 public class ArrayListQuickSort<T> {
     public static <T> void quickSort(MyArrayList<T> list, int low, int high, Comparator<? super T> comparator) {
+        if (list.size()<=1)
+            return;
         if (low < high) {
             int partitionIndex = partition(list, low, high, comparator);
             quickSort(list, low, partitionIndex - 1, comparator);

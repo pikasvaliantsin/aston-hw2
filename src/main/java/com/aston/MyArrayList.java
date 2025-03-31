@@ -1,5 +1,6 @@
 package com.aston;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 public class MyArrayList<T> {
@@ -12,10 +13,8 @@ public class MyArrayList<T> {
     }
 
     public MyArrayList(int initialCapacity) {
-        if (initialCapacity > 0) {
+        if (initialCapacity >= 0) {
             elements = new Object[initialCapacity];
-        } else if (initialCapacity == 0) {
-            elements = new Object[0];
         } else {
             throw new IllegalArgumentException("Incorrect initialCapacity: " + initialCapacity);
         }
@@ -68,8 +67,8 @@ public class MyArrayList<T> {
 
         T removedElement = get(index);
 
-        for (int i = index; i < size - 1; i++) {
-            elements[i] = elements[i + 1];
+        if (index < size - 1) {
+            System.arraycopy(elements, index + 1, elements, index, size - index - 1);
         }
         elements[--size] = null;
         return removedElement;
@@ -83,7 +82,7 @@ public class MyArrayList<T> {
     }
 
     private void grow() {
-        int newCapacity = elements.length * 2;
+        int newCapacity = (elements.length*3)/2+1;
         Object[] newElements = new Object[newCapacity];
         System.arraycopy(elements, 0, newElements, 0, size);
         elements = newElements;
@@ -102,5 +101,12 @@ public class MyArrayList<T> {
         Object temp = elements[i];
         elements[i] = elements[j];
         elements[j] = temp;
+    }
+
+    @Override
+    public String toString() {
+        return "MyArrayList{" +
+                "elements=" + Arrays.toString(elements) +
+                '}';
     }
 }
